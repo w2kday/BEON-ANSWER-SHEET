@@ -148,10 +148,10 @@
   #search-screen { display: none; }
 
   .search-box {
-    display: flex; gap: 8px; margin-bottom: 20px;
+    display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;
   }
   .search-box input {
-    flex: 1; padding: 13px 16px;
+    width: 100%; padding: 13px 16px;
     background: var(--bg);
     border: 1.5px solid var(--border);
     border-radius: 12px;
@@ -166,6 +166,7 @@
     box-shadow: 0 0 0 4px rgba(249,199,220,.3);
   }
   .btn-search {
+    width: 100%;
     padding: 13px 18px;
     background: linear-gradient(135deg, var(--pink), var(--pink-mid));
     color: var(--pink-dark);
@@ -174,7 +175,6 @@
     font-size: 14px; font-weight: 700;
     cursor: pointer;
     transition: transform .2s;
-    white-space: nowrap;
   }
   .btn-search:hover { transform: translateY(-1px); }
 
@@ -423,7 +423,7 @@ function login() {
   const pw = document.getElementById('inp-pw').value;
   const err = document.getElementById('login-err');
 
-  if (hash(id) !== ID_H || hash(pw) !== PW_H) {
+  if (hash(id.toLowerCase()) !== ID_H || hash(pw) !== PW_H) {
     err.textContent = "❌ 아이디 또는 비밀번호가 틀렸습니다";
     err.classList.remove('shake');
     void err.offsetWidth;

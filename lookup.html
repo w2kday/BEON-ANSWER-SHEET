@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영어영문답사 명단 조회</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink:      #f9c7dc;
+    --pink-mid:  #f0a0c0;
+    --pink-deep: #c4607a;
+    --pink-dark: #7a2e45;
+    --bg:        #fef6f9;
+    --surface:   #ffffff;
+    --text:      #2c1018;
+    --text-muted:#9a6475;
+    --border:    rgba(249,199,220,0.6);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    position: relative;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, rgba(249,199,220,.35) 0%, transparent 70%);
+    top: -120px; right: -120px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(249,199,220,.25) 0%, transparent 70%);
+    bottom: -80px; left: -80px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .dot-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image: radial-gradient(circle, rgba(249,199,220,.4) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .wrap {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 420px;
+  }
+
+  /* 헤더 */
+  .site-header { text-align: center; margin-bottom: 24px; }
+  .site-title {
+    font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--pink-deep); font-weight: 300; display: block; margin-bottom: 8px;
+  }
+  .site-title-kr { font-size: 22px; font-weight: 700; color: var(--text); }
+  .title-line {
+    display: flex; align-items: center; gap: 12px;
+    justify-content: center; margin-top: 12px;
+  }
+  .title-line::before, .title-line::after {
+    content: ''; flex: 1; height: 1px;
+  }
+  .title-line::before { background: linear-gradient(to right, transparent, var(--pink-mid)); }
+  .title-line::after  { background: linear-gradient(to left,  transparent, var(--pink-mid)); }
+  .title-line span { font-size: 14px; }
+
+  /* 카드 */
+  .card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 24px;
+    box-shadow: 0 4px 28px rgba(249,100,140,.07);
+  }
+
+  /* 로그인 */
+  #login-screen { text-align: center; }
+  .lock-emoji {
+    font-size: 44px; display: block; margin-bottom: 16px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .card-title {
+    font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px;
+  }
+  .card-sub {
+    font-size: 13px; color: var(--text-muted); font-weight: 300; margin-bottom: 28px;
+  }
+  .field { margin-bottom: 12px; text-align: left; }
+  .field label {
+    display: block; font-size: 11px; font-weight: 700;
+    color: var(--pink-deep); letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .field input {
+    width: 100%; padding: 13px 16px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .field input:focus {
+    border-color: var(--pink-mid);
+    box-shadow: 0 0 0 4px rgba(249,199,220,.3);
+  }
+  .btn-main {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, var(--pink), var(--pink-mid));
+    color: var(--pink-dark);
+    border: none; border-radius: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; margin-top: 6px;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 16px rgba(240,160,192,.35);
+  }
+  .btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(240,160,192,.45); }
+  .err-msg {
+    font-size: 13px; color: #c0506a; min-height: 20px; margin-top: 10px;
+    text-align: center;
+  }
+  .err-msg.shake { animation: shake .35s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-8px); }
+    40%,80% { transform: translateX(8px); }
+  }
+
+  /* 검색 화면 */
+  #search-screen { display: none; }
+
+  .search-box {
+    display: flex; gap: 8px; margin-bottom: 20px;
+  }
+  .search-box input {
+    flex: 1; padding: 13px 16px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .search-box input:focus {
+    border-color: var(--pink-mid);
+    box-shadow: 0 0 0 4px rgba(249,199,220,.3);
+  }
+  .btn-search {
+    padding: 13px 18px;
+    background: linear-gradient(135deg, var(--pink), var(--pink-mid));
+    color: var(--pink-dark);
+    border: none; border-radius: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer;
+    transition: transform .2s;
+    white-space: nowrap;
+  }
+  .btn-search:hover { transform: translateY(-1px); }
+
+  /* 결과 카드 */
+  #result-area { min-height: 40px; }
+
+  .result-card {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 16px;
+    margin-bottom: 10px;
+    animation: popIn .3s cubic-bezier(.175,.885,.32,1.275);
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: translateY(8px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+  }
+  .result-name {
+    font-size: 17px; font-weight: 700; color: var(--text);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .result-name .student-id {
+    font-size: 12px; font-weight: 400; color: var(--text-muted); margin-left: auto;
+  }
+  .staff-badge {
+    font-size: 11px; font-weight: 700;
+    color: var(--pink-deep);
+    background: rgba(249,199,220,.4);
+    border: 1px solid var(--pink-mid);
+    border-radius: 6px;
+    padding: 1px 6px;
+    letter-spacing: 0.5px;
+  }
+  .result-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  }
+  .info-pill {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .info-pill .label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    color: var(--pink-deep); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .info-pill .value {
+    font-size: 18px; font-weight: 900; color: var(--text);
+  }
+  .info-pill.car .value { color: var(--pink-deep); }
+
+  .no-result {
+    text-align: center; color: var(--text-muted);
+    font-size: 14px; padding: 24px 0;
+  }
+
+  .logout-btn {
+    display: block; margin-top: 16px;
+    background: none; border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 10px;
+    width: 100%; color: var(--text-muted);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px; cursor: pointer;
+    transition: all .2s;
+  }
+  .logout-btn:hover { border-color: var(--pink-mid); color: var(--pink-deep); }
+
+  .footer-deco {
+    text-align: center; margin-top: 20px;
+    font-size: 12px; color: rgba(196,96,122,.35); letter-spacing: 3px;
+  }
+</style>
+</head>
+<body>
+<div class="dot-bg"></div>
+
+<div class="wrap">
+  <div class="site-header">
+    <span class="site-title">Member Lookup</span>
+    <div class="site-title-kr">영어영문답사</div>
+    <div class="title-line"><span>✦</span></div>
+  </div>
+
+  <div class="card">
+
+    <!-- 로그인 -->
+    <div id="login-screen">
+      <span class="lock-emoji">🌸</span>
+      <div class="card-title">로그인</div>
+      <div class="card-sub">스태프 전용 페이지입니다</div>
+
+      <div class="field">
+        <label>아이디</label>
+        <input type="text" id="inp-id" placeholder="아이디 입력" autocomplete="off"
+          onkeydown="if(event.key==='Enter')document.getElementById('inp-pw').focus()">
+      </div>
+      <div class="field">
+        <label>비밀번호</label>
+        <input type="password" id="inp-pw" placeholder="비밀번호 입력"
+          onkeydown="if(event.key==='Enter')login()">
+      </div>
+      <button class="btn-main" onclick="login()">로그인</button>
+      <div class="err-msg" id="login-err"></div>
+    </div>
+
+    <!-- 검색 -->
+    <div id="search-screen">
+      <div class="search-box">
+        <input type="text" id="search-inp" placeholder="이름 또는 학번 검색"
+          onkeydown="if(event.key==='Enter')search()" oninput="search()">
+        <button class="btn-search" onclick="search()">검색</button>
+      </div>
+      <div id="result-area"></div>
+      <button class="logout-btn" onclick="logout()">🔒 로그아웃</button>
+    </div>
+
+  </div>
+
+  <div class="footer-deco">✦ &nbsp; ✦ &nbsp; ✦</div>
+</div>
+
+<script>
+// ── 데이터 ──
+const STUDENTS = [
+  {name:"김고은",  id:"202610290", room:"304호", group:"10조"},
+  {name:"김영주",  id:"202510041", room:"405호", group:"10조"},
+  {name:"마정화",  id:"202310064", room:"209호", group:"10조"},
+  {name:"박윤민",  id:"202510052", room:"405호", group:"10조"},
+  {name:"양준희",  id:"202310073", room:"206호", group:"10조"},
+  {name:"오송미",  id:"202610067", room:"307호", group:"10조"},
+  {name:"이상민",  id:"202610317", room:"402호", group:"10조"},
+  {name:"이윤하",  id:"202212687", room:"210호", group:"10조"},
+  {name:"이은수",  id:"202610322", room:"304호", group:"10조"},
+  {name:"조현민",  id:"202510079", room:"401호", group:"10조"},
+  {name:"최서인",  id:"202610085", room:"308호", group:"10조"},
+  {name:"김은준",  id:"202610047", room:"210호", group:"1조"},
+  {name:"김평일",  id:"202510046", room:"303호", group:"1조"},
+  {name:"류강이",  id:"202610054", room:"311호", group:"1조"},
+  {name:"배서연",  id:"202415011", room:"206호", group:"1조"},
+  {name:"오해원",  id:"202510061", room:"408호", group:"1조"},
+  {name:"윤주아",  id:"202510063", room:"408호", group:"1조"},
+  {name:"이도영",  id:"202415013", room:"402호", group:"1조"},
+  {name:"이소현",  id:"202610072", room:"306호", group:"1조"},
+  {name:"장예슬",  id:"202210095", room:"208호", group:"1조"},
+  {name:"김민지",  id:"202510039", room:"201호", group:"2조"},
+  {name:"김보경",  id:"202610044", room:"312호", group:"2조"},
+  {name:"나현찬",  id:"202610053", room:"303호", group:"2조"},
+  {name:"성진우",  id:"202610062", room:"303호", group:"2조"},
+  {name:"우아현",  id:"202510313", room:"407호", group:"2조"},
+  {name:"이승희",  id:"202510315", room:"211호", group:"2조"},
+  {name:"이유진",  id:"202210089", room:"208호", group:"2조"},
+  {name:"조연서",  id:"202610082", room:"312호", group:"2조"},
+  {name:"황재희",  id:"202510333", room:"211호", group:"2조"},
+  {name:"곽여리",  id:"202610038", room:"305호", group:"3조"},
+  {name:"김지민",  id:"202510044", room:"408호", group:"3조"},
+  {name:"김하은",  id:"202610051", room:"305호", group:"3조"},
+  {name:"류나연",  id:"202410064", room:"207호", group:"3조"},
+  {name:"박효리",  id:"202510304", room:"211호", group:"3조"},
+  {name:"윤희연",  id:"202410082", room:"207호", group:"3조"},
+  {name:"전경빈",  id:"202510070", room:"401호", group:"3조"},
+  {name:"정재진",  id:"202610078", room:"203호", group:"3조"},
+  {name:"강다현",  id:"202610034", room:"310호", group:"4조"},
+  {name:"공예빈",  id:"202610037", room:"305호", group:"4조"},
+  {name:"권순욱",  id:"202610041", room:"203호", group:"4조"},
+  {name:"김예빈",  id:"202610046", room:"311호", group:"4조"},
+  {name:"김원휘",  id:"202510043", room:"301호", group:"4조"},
+  {name:"랑주연",  id:"202413711", room:"202호", group:"4조"},
+  {name:"배인영",  id:"202410075", room:"205호", group:"4조"},
+  {name:"서승희",  id:"202110073", room:"205호", group:"4조"},
+  {name:"임소현",  id:"202410092", room:"207호", group:"4조"},
+  {name:"김도아",  id:"202510037", room:"201호", group:"5조"},
+  {name:"김홍진",  id:"202210065", room:"403호", group:"5조"},
+  {name:"박연욱",  id:"202210069", room:"212호", group:"5조"},
+  {name:"박하연",  id:"202610059", room:"210호", group:"5조"},
+  {name:"오계령",  id:"202413713", room:"202호", group:"5조"},
+  {name:"윤서연",  id:"202310079", room:"212호", group:"5조"},
+  {name:"정수민",  id:"202610076", room:"306호", group:"5조"},
+  {name:"정수선",  id:"202510076", room:"201호", group:"5조"},
+  {name:"조수민",  id:"202310101", room:"209호", group:"5조"},
+  {name:"최서윤",  id:"202610083", room:"309호", group:"5조"},
+  {name:"김시우",  id:"202510040", room:"406호", group:"6조"},
+  {name:"박기현",  id:"202010064", room:"403호", group:"6조"},
+  {name:"박민지",  id:"202510050", room:"405호", group:"6조"},
+  {name:"변동희",  id:"202610060", room:"308호", group:"6조"},
+  {name:"윤율아",  id:"202610069", room:"308호", group:"6조"},
+  {name:"이서연",  id:"202610071", room:"311호", group:"6조"},
+  {name:"전유진",  id:"202510071", room:"301호", group:"6조"},
+  {name:"텟미얏웨이", id:"202213865", room:"202호", group:"6조"},
+  {name:"최민제",  id:"202210106", room:"404호", group:"6조"},
+  {name:"김신후",  id:"202610294", room:"302호", group:"7조"},
+  {name:"김예영",  id:"202510042", room:"406호", group:"7조"},
+  {name:"나수영",  id:"202610052", room:"312호", group:"7조"},
+  {name:"문서연",  id:"202610055", room:"307호", group:"7조"},
+  {name:"배인혁",  id:"202110268", room:"403호", group:"7조"},
+  {name:"이승민",  id:"202610318", room:"402호", group:"7조"},
+  {name:"정신혜",  id:"202610077", room:"307호", group:"7조"},
+  {name:"최승우",  id:"202510082", room:"303호", group:"7조"},
+  {name:"최유진",  id:"202510083", room:"406호", group:"7조"},
+  {name:"강한울",  id:"202610035", room:"203호", group:"8조"},
+  {name:"노현",    id:"202510292", room:"407호", group:"8조"},
+  {name:"박유진",  id:"202410072", room:"205호", group:"8조"},
+  {name:"송혜원",  id:"202010072", room:"208호", group:"8조"},
+  {name:"안예영",  id:"202510310", room:"407호", group:"8조"},
+  {name:"이보름",  id:"202510065", room:"301호", group:"8조"},
+  {name:"이윤영",  id:"202610321", room:"302호", group:"8조"},
+  {name:"이해령",  id:"202610326", room:"302호", group:"8조"},
+  {name:"홍채린",  id:"202610088", room:"306호", group:"8조"},
+  {name:"구민서",  id:"202310046", room:"206호", group:"9조"},
+  {name:"박혜준",  id:"202310068", room:"209호", group:"9조"},
+  {name:"이하민",  id:"202610074", room:"203호", group:"9조"},
+  {name:"정민규",  id:"202510074", room:"401호", group:"9조"},
+  {name:"정승호",  id:"202110103", room:"404호", group:"9조"},
+  {name:"정지우",  id:"202610079", room:"310호", group:"9조"},
+  {name:"정태희",  id:"202610080", room:"310호", group:"9조"},
+  {name:"최서윤",  id:"202610084", room:"309호", group:"9조"},
+  {name:"허주원",  id:"202610087", room:"309호", group:"9조"},
+  {name:"방서원",  id:"202510054", room:"", group:""},
+  {name:"박혜준",  id:"202310068", room:"209호", group:"9조"},
+];
+
+// 스태프 목록
+const STAFF = new Set(["김도아","김민지","김원휘","이보름","전경빈","전유진","정수선","조현민","최승우","강한울","공예빈","변동희","성진우","오송미","정수민","정신혜","정재진","홍채린","정민규","이소현","김평일"]);
+
+// 호차 계산
+function getCar(group) {
+  const n = parseInt(group);
+  if (n >= 1 && n <= 4) return "1호차";
+  if (n >= 5 && n <= 7) return "2호차";
+  if (n >= 8 && n <= 10) return "3호차";
+  return "-";
+}
+
+// 로그인 해시
+function hash(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(16);
+}
+const ID_H = "2e1562";   // beon
+const PW_H = "169004";   // 0125
+
+function login() {
+  const id = document.getElementById('inp-id').value.trim();
+  const pw = document.getElementById('inp-pw').value;
+  const err = document.getElementById('login-err');
+
+  if (hash(id) !== ID_H || hash(pw) !== PW_H) {
+    err.textContent = "❌ 아이디 또는 비밀번호가 틀렸습니다";
+    err.classList.remove('shake');
+    void err.offsetWidth;
+    err.classList.add('shake');
+    document.getElementById('inp-pw').value = '';
+    setTimeout(() => err.textContent = '', 2500);
+    return;
+  }
+
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('search-screen').style.display = 'block';
+  setTimeout(() => document.getElementById('search-inp').focus(), 100);
+}
+
+function logout() {
+  document.getElementById('search-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('inp-id').value = '';
+  document.getElementById('inp-pw').value = '';
+  document.getElementById('result-area').innerHTML = '';
+  document.getElementById('search-inp').value = '';
+}
+
+function search() {
+  const q = document.getElementById('search-inp').value.trim();
+  const area = document.getElementById('result-area');
+
+  if (!q) { area.innerHTML = ''; return; }
+
+  // 이름 또는 학번으로 검색
+  const results = STUDENTS.filter(s =>
+    s.name.includes(q) || s.id.includes(q)
+  );
+
+  if (results.length === 0) {
+    area.innerHTML = `<div class="no-result">🔍 검색 결과가 없어요</div>`;
+    return;
+  }
+
+  area.innerHTML = results.map(s => `
+    <div class="result-card">
+      <div class="result-name">
+        ${s.name}${STAFF.has(s.name) ? ' <span class="staff-badge">(STAFF)</span>' : ''}
+        <span class="student-id">${s.id}</span>
+      </div>
+      <div class="result-grid">
+        <div class="info-pill">
+          <div class="label">방번호</div>
+          <div class="value">${s.room || '-'}</div>
+        </div>
+        <div class="info-pill">
+          <div class="label">조</div>
+          <div class="value">${s.group || '-'}</div>
+        </div>
+        <div class="info-pill car">
+          <div class="label">차량</div>
+          <div class="value">${s.group ? getCar(s.group) : '-'}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('inp-id').focus();
+</script>
+</body>
+</html>

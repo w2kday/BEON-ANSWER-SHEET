@@ -1,1 +1,380 @@
-<!DOCTYPE html><meta charset=utf-8><meta name=viewport content=width=device-width,initial-scale=1><title>답안</title><style>*{box-sizing:border-box}body{font-family:sans-serif;background:#0a0a0f;color:#e8e8f0;margin:0;padding:20px;min-height:100vh}.c{max-width:400px;margin:40px auto;background:#13131a;border:1px solid #2a2a3a;border-radius:12px;padding:24px}h1{margin:0 0 16px;text-align:center;font-size:20px;color:#a78bfa}input{width:100%;padding:12px;background:#0a0a0f;border:1px solid #2a2a3a;border-radius:8px;color:#fff;font-size:16px;text-align:center;letter-spacing:4px;outline:none}button{width:100%;padding:12px;margin-top:8px;background:#5b6af0;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer}.g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.a{background:#1c1c26;padding:12px;border-radius:8px;text-align:center}.n{font-size:11px;color:#888}.v{font-size:20px;font-weight:900;color:#34d399;margin-top:4px}.e{color:#f87171;text-align:center;font-size:12px;margin-top:8px}</style><div class=c><h1>🔐 답안</h1><div id=l><input id=p type=password placeholder=비밀번호 autofocus><button onclick=c()>확인</button><div class=e id=e></div></div><div id=r hidden><div class=g id=g></div></div></div><script>let D={"p":"169004","a":{"1":"2","2":"라틴문자","3":"2","4":"3","5":"2","6":"암각화","7":"4","8":"F"}};function h(s){let h=0;for(let i=0;i<s.length;i++)h=(Math.imul(31,h)+s.charCodeAt(i))|0;return(h>>>0).toString(16)}function c(){if(h(p.value)!=D.p){e.textContent="틀렸어요";return}l.hidden=1;r.hidden=0;let o="";for(let k in D.a)o+='<div class=a><div class=n>'+k+'번</div><div class=v>'+D.a[k]+'</div></div>';g.innerHTML=o}p.onkeydown=e=>{if(e.key=="Enter")c()}</script>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영어영문답사</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink:      #f9c7dc;
+    --pink-mid:  #f0a0c0;
+    --pink-deep: #c4607a;
+    --pink-dark: #7a2e45;
+    --bg:        #fef6f9;
+    --surface:   #ffffff;
+    --text:      #2c1018;
+    --text-muted:#9a6475;
+    --border:    rgba(249,199,220,0.6);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  body::before {
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, rgba(249,199,220,.35) 0%, transparent 70%);
+    top: -120px; right: -120px;
+  }
+  body::after {
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(249,199,220,.25) 0%, transparent 70%);
+    bottom: -80px; left: -80px;
+  }
+
+  .dot-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image: radial-gradient(circle, rgba(249,199,220,.4) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .wrap {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 400px;
+  }
+
+  .site-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .site-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--pink-deep);
+    font-weight: 300;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .site-title-kr {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .title-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 14px;
+  }
+  .title-line::before, .title-line::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--pink-mid));
+  }
+  .title-line::after {
+    background: linear-gradient(to left, transparent, var(--pink-mid));
+  }
+  .title-line span { font-size: 16px; }
+
+  .card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 24px;
+    padding: 36px 28px;
+    box-shadow:
+      0 4px 32px rgba(249,100,140,.08),
+      0 1px 4px rgba(200,80,100,.06);
+  }
+
+  #lock-screen { text-align: center; }
+
+  .lock-emoji {
+    font-size: 44px;
+    display: block;
+    margin-bottom: 16px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .lock-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .lock-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+
+  .input-wrap {
+    position: relative;
+    margin-bottom: 14px;
+  }
+
+  .input-wrap input {
+    width: 100%;
+    padding: 15px 18px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 10px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .input-wrap input::placeholder {
+    letter-spacing: 3px;
+    font-size: 14px;
+    color: #d4a0b4;
+  }
+  .input-wrap input:focus {
+    border-color: var(--pink-mid);
+    box-shadow: 0 0 0 4px rgba(249,199,220,.3);
+  }
+
+  .btn-unlock {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--pink) 0%, var(--pink-mid) 100%);
+    color: var(--pink-dark);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 20px rgba(240,160,192,.4);
+  }
+  .btn-unlock:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(240,160,192,.5);
+  }
+  .btn-unlock:active { transform: scale(.98); }
+
+  .pw-error {
+    font-size: 13px;
+    color: #c0506a;
+    min-height: 22px;
+    margin-top: 10px;
+  }
+  .pw-error.shake { animation: shake .35s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-8px); }
+    40%,80% { transform: translateX(8px); }
+  }
+
+  #answer-screen { display: none; }
+
+  .ans-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .ans-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .ans-badge {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .ans-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .ans-cell {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(12px) scale(.97);
+    animation: popIn .4s cubic-bezier(.175,.885,.32,1.275) forwards;
+  }
+  @keyframes popIn {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .ans-cell .num {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .ans-cell .val {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--pink-deep);
+    word-break: break-all;
+    line-height: 1.2;
+  }
+
+  .btn-relock {
+    width: 100%;
+    padding: 11px;
+    background: transparent;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-muted);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-relock:hover {
+    border-color: var(--pink-mid);
+    color: var(--pink-deep);
+    background: rgba(249,199,220,.1);
+  }
+
+  .footer-deco {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: rgba(196,96,122,.35);
+    letter-spacing: 3px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+</style>
+</head>
+<body>
+<div class="dot-bg"></div>
+
+<div class="wrap">
+
+  <div class="site-header">
+    <span class="site-title">Answer Sheet</span>
+    <div class="site-title-kr">영어영문답사</div>
+    <div class="title-line"><span>✦</span></div>
+  </div>
+
+  <div class="card">
+
+    <div id="lock-screen">
+      <span class="lock-emoji">🌸</span>
+      <h1 class="lock-title">비밀번호 입력</h1>
+      <p class="lock-sub">정답 확인을 위해 비밀번호를 입력해주세요</p>
+      <div class="input-wrap">
+        <input type="password" id="pw-input" placeholder="• • • •" maxlength="20"
+          onkeydown="if(event.key==='Enter') unlock()">
+      </div>
+      <button class="btn-unlock" onclick="unlock()">확인</button>
+      <div class="pw-error" id="pw-error"></div>
+    </div>
+
+    <div id="answer-screen">
+      <div class="ans-header">
+        <span class="ans-title">정답 확인 ✦</span>
+        <span class="ans-badge">8문항</span>
+      </div>
+      <div class="ans-grid" id="ans-grid"></div>
+      <button class="btn-relock" onclick="lock()">🔒 다시 잠금</button>
+    </div>
+
+  </div>
+
+  <div class="footer-deco">✦ &nbsp; ✦ &nbsp; ✦</div>
+
+</div>
+
+<script>
+const ANSWERS = {1:'2', 2:'라틴문자', 3:'2', 4:'3', 5:'2', 6:'암각화', 7:'4', 8:'F'};
+const PW_HASH = '169004';
+
+function hash(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(16);
+}
+
+function unlock() {
+  const pw = document.getElementById('pw-input').value;
+  const err = document.getElementById('pw-error');
+  if (hash(pw) !== PW_HASH) {
+    err.textContent = '❌ 비밀번호가 틀렸습니다';
+    err.classList.remove('shake');
+    void err.offsetWidth;
+    err.classList.add('shake');
+    document.getElementById('pw-input').value = '';
+    setTimeout(() => err.textContent = '', 2500);
+    return;
+  }
+  document.getElementById('lock-screen').style.display = 'none';
+  document.getElementById('answer-screen').style.display = 'block';
+  const grid = document.getElementById('ans-grid');
+  grid.innerHTML = '';
+  Object.entries(ANSWERS).forEach(([num, val], i) => {
+    const c = document.createElement('div');
+    c.className = 'ans-cell';
+    c.style.animationDelay = (i * 60) + 'ms';
+    c.innerHTML = `<div class="num">${num}번</div><div class="val">${val}</div>`;
+    grid.appendChild(c);
+  });
+}
+
+function lock() {
+  document.getElementById('answer-screen').style.display = 'none';
+  document.getElementById('lock-screen').style.display = 'block';
+  document.getElementById('pw-input').value = '';
+}
+
+document.getElementById('pw-input').focus();
+</script>
+</body>
+</html>

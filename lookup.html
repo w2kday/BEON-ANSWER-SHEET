@@ -403,6 +403,23 @@
   /* ══════════ MOBILE LAYOUT (<900px) ══════════ */
   /* ════════════════════════════════════════════ */
   @media (max-width: 899px) {
+    /* 툴바를 flex column으로 (검색 결과가 버튼 위로) */
+    .toolbar {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* 검색 결과 영역 */
+    .toolbar .split-layout {
+      width: 100%;
+      margin: 0 0 20px 0;
+    }
+    
+    .toolbar .results-section {
+      height: auto;
+      max-height: 400px;
+    }
+    
     /* 결과 카드 세로 배치 */
     .result-card {
       padding: 14px 16px;
@@ -2198,6 +2215,35 @@ function createSakuraAnimation() {
     }, 1000);
   }, 5000);
 }
+
+// 모바일 레이아웃: 검색 결과를 버튼 위로
+function applyMobileLayout() {
+  if (window.innerWidth < 900) {
+    const toolbar = document.querySelector('.toolbar');
+    const splitLayout = document.querySelector('.split-layout');
+    const browseBtns = document.querySelector('.browse-btns');
+    
+    // split-layout이 이미 toolbar 안에 있는지 확인
+    if (splitLayout && splitLayout.parentElement !== toolbar) {
+      toolbar.insertBefore(splitLayout, browseBtns);
+    }
+  } else {
+    // 데스크탑: 원래 위치로 복원
+    const toolbar = document.querySelector('.toolbar');
+    const splitLayout = document.querySelector('.split-layout');
+    const mainScreen = document.getElementById('main-screen');
+    
+    if (splitLayout && splitLayout.parentElement === toolbar) {
+      mainScreen.appendChild(splitLayout);
+    }
+  }
+}
+
+// 초기 실행
+applyMobileLayout();
+
+// 창 크기 변경시 재적용
+window.addEventListener('resize', applyMobileLayout);
 
 document.getElementById('inp-id').focus();
 </script>

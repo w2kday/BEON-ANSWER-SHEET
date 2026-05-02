@@ -366,37 +366,6 @@
     background: rgba(249,199,220,.2);
   }
   
-  /* 차량별 색상 코딩 (차량만) */
-  .car-badge.car-1 { 
-    border-color: #ff6b6b;
-    color: #ff6b6b;
-    background: rgba(255, 107, 107, 0.1);
-  }
-  .car-badge.car-1:hover { 
-    background: rgba(255, 107, 107, 0.25);
-    border-color: #ff6b6b;
-    box-shadow: 0 0 12px rgba(255, 107, 107, 0.3);
-  }
-  .car-badge.car-2 { 
-    border-color: #33d9b2;
-    color: #33d9b2;
-    background: rgba(51, 217, 178, 0.1);
-  }
-  .car-badge.car-2:hover { 
-    background: rgba(51, 217, 178, 0.25);
-    border-color: #33d9b2;
-    box-shadow: 0 0 12px rgba(51, 217, 178, 0.3);
-  }
-  .car-badge.car-3 { 
-    border-color: #5765f2;
-    color: #5765f2;
-    background: rgba(87, 101, 242, 0.1);
-  }
-  .car-badge.car-3:hover { 
-    background: rgba(87, 101, 242, 0.25);
-    border-color: #5765f2;
-    box-shadow: 0 0 12px rgba(87, 101, 242, 0.3);
-  }
   
   /* 학번 컴팩트 */
   .student-id-compact {
@@ -427,6 +396,75 @@
     }
     .student-id-compact {
       font-size: 13px;
+    }
+  }
+
+  /* ════════════════════════════════════════════ */
+  /* ══════════ MOBILE LAYOUT (<900px) ══════════ */
+  /* ════════════════════════════════════════════ */
+  @media (max-width: 899px) {
+    /* 결과 카드 세로 배치 */
+    .result-card {
+      padding: 14px 16px;
+      gap: 10px;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    /* 카드 내부 조정 */
+    .result-main {
+      gap: 10px;
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    .name-section {
+      min-width: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .name-text {
+      font-size: 17px;
+      font-weight: 900;
+    }
+    
+    .staff-badge {
+      font-size: 9px;
+      padding: 2px 6px;
+    }
+    
+    /* 배지를 세로로 한 줄씩 배치 */
+    .info-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    .info-compact > span {
+      width: 100%;
+      min-width: 0;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      box-sizing: border-box;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .student-id-compact {
+      font-size: 12px;
+      padding: 6px 10px;
+      width: fit-content;
+      align-self: flex-end;
+      white-space: nowrap;
     }
   }
 
@@ -788,58 +826,121 @@
       background: var(--pink-deep);
     }
 
-    /* 결과 카드 1열 (세로 배치) */
-    #result-area:not(:empty) {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .result-card {
-      margin-bottom: 0;
-      transition: transform .2s, box-shadow .2s;
-    }
-    .result-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(249,100,140,.1);
-    }
-
-    /* 빈 상태 (검색 안 했을 때) */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      background: rgba(255, 255, 255, 0.5);
-      backdrop-filter: blur(8px);
-      border: 1.5px dashed var(--border);
-      border-radius: 16px;
-    }
-    .empty-state .emoji {
-      font-size: 56px;
-      margin-bottom: 16px;
-      display: block;
-      opacity: 0.7;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    .empty-state .title {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    .empty-state .desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-
     /* divider 숨김 */
     #main-screen .divider { display: none; }
 
     /* 로그아웃 버튼은 툴바로 이동했으니 숨김 */
     #main-screen > .logout-btn { display: none; }
+
+    /* 검색해보세요 빈 상태 */
+    .empty-state {
+      text-align: center;
+      padding: 40px 30px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(249,199,220,0.1));
+      backdrop-filter: blur(12px);
+      border: 2px dashed var(--pink);
+      border-radius: 20px;
+      margin: 20px 0;
+    }
+    .empty-state .emoji {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+      opacity: 0.8;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .empty-state .title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .empty-state .desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 데스크탑 검색 결과 카드 - 한 줄에 하나씩 */
+    #result-area:not(:empty) {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .result-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(249,199,220,0.05));
+      backdrop-filter: blur(16px);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      transition: all .3s cubic-bezier(.175,.885,.32,1.275);
+      display: flex;
+      flex-direction: row; /* 가로 배치 */
+      align-items: center;
+      gap: 20px;
+    }
+    .result-card:hover {
+      transform: translateX(6px) scale(1.01);
+      border-color: var(--pink-mid);
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(249,199,220,0.1));
+      box-shadow: 0 8px 32px rgba(249,100,140,.18), 0 0 0 1px var(--pink-mid);
+    }
+    
+    /* 카드 내부 - 가로 배치 */
+    .result-main {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 24px;
+    }
+    .name-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 100px;
+    }
+    .name-text {
+      font-size: 19px;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    
+    /* 배지들 가로 배치 */
+    .info-compact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      flex: 1;
+    }
+    .info-compact > span {
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 10px;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .info-compact > span:hover {
+      transform: translateY(-2px) scale(1.05);
+    }
+    
+    .student-id-compact {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 14px;
+      background: rgba(249,199,220,.2);
+      border-radius: 10px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
 
     /* 상세 패널 가운데 정렬 (모달처럼) */
     .browse-overlay {
@@ -935,7 +1036,6 @@
           </div>
         </div>
 
-        <button class="logout-inline desktop-only" onclick="changePassword()" title="비밀번호 변경" style="margin-right: 8px;">🔑</button>
         <button class="logout-inline desktop-only" onclick="logout()" title="로그아웃">🔒</button>
       </div>
 
@@ -1032,6 +1132,142 @@ const ENC_STAFF = {"salt":"ENYEONG2025TRIP","iv":"vsecE9CxW+bfgIo7","data":"EL/4
 
 let STUDENTS = [];
 let STAFF = new Set();
+// ══════════════════════════════════════════════════════════
+// 로컬 통계 (외부 전송 없음, localStorage만 사용)
+// ══════════════════════════════════════════════════════════
+
+function getStats() {
+  const stats = localStorage.getItem('lookup_stats');
+  if (!stats) {
+    return {
+      totalSearches: 0,
+      searchKeywords: {},
+      browseClicks: { room: 0, group: 0, car: 0, manual: 0 },
+      totalLogins: 0,
+      firstLogin: null,
+      lastLogin: null
+    };
+  }
+  return JSON.parse(stats);
+}
+
+function saveStats(stats) {
+  localStorage.setItem('lookup_stats', JSON.stringify(stats));
+}
+
+function trackSearch(keyword) {
+  const stats = getStats();
+  stats.totalSearches++;
+  
+  // 검색어 기록 (빈 문자열 제외)
+  if (keyword && keyword.trim()) {
+    const key = keyword.trim();
+    stats.searchKeywords[key] = (stats.searchKeywords[key] || 0) + 1;
+  }
+  
+  saveStats(stats);
+}
+
+function trackBrowse(type) {
+  const stats = getStats();
+  stats.browseClicks[type]++;
+  saveStats(stats);
+}
+
+function trackLogin() {
+  const stats = getStats();
+  stats.totalLogins++;
+  const now = new Date().toISOString();
+  if (!stats.firstLogin) stats.firstLogin = now;
+  stats.lastLogin = now;
+  saveStats(stats);
+}
+
+function showStats() {
+  const stats = getStats();
+  
+  // 인기 검색어 Top 5
+  const topKeywords = Object.entries(stats.searchKeywords)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([word, count]) => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span>${word}</span><strong>${count}회</strong></div>`)
+    .join('') || '<div style="color:var(--text-muted);text-align:center;padding:20px;">아직 검색 기록이 없습니다</div>';
+  
+  const overlay = document.createElement('div');
+  overlay.className = 'browse-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML = `
+    <div class="browse-sheet" style="max-width:500px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h2 style="font-size:18px;font-weight:900;color:var(--text);margin:0;">📊 사용 통계</h2>
+        <button onclick="this.closest('.browse-overlay').remove()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-muted);">×</button>
+      </div>
+      
+      <div style="background:rgba(249,199,220,0.1);padding:16px;border-radius:12px;margin-bottom:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="text-align:center;">
+            <div style="font-size:24px;font-weight:900;color:var(--pink-mid);">${stats.totalSearches}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">총 검색 횟수</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:24px;font-weight:900;color:var(--pink-mid);">${stats.totalLogins}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">총 로그인 횟수</div>
+          </div>
+        </div>
+      </div>
+      
+      <div style="margin-bottom:16px;">
+        <h3 style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">🔍 인기 검색어 Top 5</h3>
+        <div style="background:var(--bg);border-radius:10px;padding:12px;">
+          ${topKeywords}
+        </div>
+      </div>
+      
+      <div style="margin-bottom:16px;">
+        <h3 style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">📁 브라우즈 클릭</h3>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+          <div style="background:var(--bg);padding:10px;border-radius:8px;text-align:center;">
+            <div style="font-size:18px;font-weight:900;color:var(--pink-mid);">${stats.browseClicks.room}</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">방호수</div>
+          </div>
+          <div style="background:var(--bg);padding:10px;border-radius:8px;text-align:center;">
+            <div style="font-size:18px;font-weight:900;color:var(--pink-mid);">${stats.browseClicks.group}</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">조</div>
+          </div>
+          <div style="background:var(--bg);padding:10px;border-radius:8px;text-align:center;">
+            <div style="font-size:18px;font-weight:900;color:var(--pink-mid);">${stats.browseClicks.car}</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">차량</div>
+          </div>
+          <div style="background:var(--bg);padding:10px;border-radius:8px;text-align:center;">
+            <div style="font-size:18px;font-weight:900;color:var(--pink-mid);">${stats.browseClicks.manual}</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">메뉴얼</div>
+          </div>
+        </div>
+      </div>
+      
+      ${stats.firstLogin ? `
+        <div style="font-size:11px;color:var(--text-muted);text-align:center;padding:12px 0;border-top:1px solid var(--border);">
+          최초 로그인: ${new Date(stats.firstLogin).toLocaleString('ko-KR')}<br>
+          마지막 로그인: ${new Date(stats.lastLogin).toLocaleString('ko-KR')}
+        </div>
+      ` : ''}
+      
+      <button onclick="if(confirm('모든 통계 데이터를 삭제하시겠습니까?')){localStorage.removeItem('lookup_stats');this.closest('.browse-overlay').remove();alert('통계가 초기화되었습니다.');}" 
+        style="width:100%;padding:10px;background:none;border:1.5px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:12px;cursor:pointer;margin-top:12px;">
+        🗑️ 통계 초기화
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.remove();
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// 기존 코드
+// ══════════════════════════════════════════════════════════
+
 let SESSION_ACTIVE = false;
 let AUTO_BLUR_TIMER = null;
 
@@ -1120,6 +1356,9 @@ async function login() {
   }
   
   SESSION_ACTIVE = true;
+  
+  // 통계 기록
+  trackLogin();
   
   // 벚꽃잎 애니메이션 시작
   createSakuraAnimation();
@@ -1225,16 +1464,439 @@ function logout() {
 }
 
 // ── 검색 ──
+// ══════════════════════════════════════════════════════════
+// 관리자 패널
+// ══════════════════════════════════════════════════════════
+
+function openAdminPanel() {
+  // 비밀번호 확인 모달
+  const overlay = document.createElement('div');
+  overlay.className = 'browse-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML = `
+    <div class="browse-sheet" style="max-width:400px;">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:48px;margin-bottom:12px;">🔐</div>
+        <h2 style="font-size:18px;font-weight:900;color:var(--text);margin:0;">관리자 인증</h2>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">비밀번호를 입력하세요</p>
+      </div>
+      
+      <input type="password" id="admin-pw" placeholder="비밀번호" 
+        style="width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:16px;font-family:'Noto Sans KR',sans-serif;box-sizing:border-box;"
+        onkeydown="if(event.key==='Enter')verifyAdminPassword()">
+      
+      <div style="display:flex;gap:8px;">
+        <button onclick="this.closest('.browse-overlay').remove()" 
+          style="flex:1;padding:12px;background:none;border:1.5px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:13px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
+          취소
+        </button>
+        <button onclick="verifyAdminPassword()" 
+          style="flex:1;padding:12px;background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
+          확인
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  
+  // 포커스
+  setTimeout(() => document.getElementById('admin-pw').focus(), 100);
+  
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.remove();
+  });
+}
+
+function verifyAdminPassword() {
+  const pw = document.getElementById('admin-pw').value;
+  const overlay = document.querySelector('.browse-overlay');
+  
+  if (pw === 'w2kday') {
+    overlay.remove();
+    showAdminDashboard();
+  } else {
+    alert('❌ 비밀번호가 틀렸습니다');
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('admin-pw').focus();
+  }
+}
+
+function showAdminDashboard() {
+  const overlay = document.createElement('div');
+  overlay.className = 'browse-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML = `
+    <div class="browse-sheet" style="max-width:450px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <div>
+          <h2 style="font-size:20px;font-weight:900;color:var(--text);margin:0;">⚙️ 관리자 패널</h2>
+          <p style="font-size:11px;color:var(--text-muted);margin-top:4px;">시스템 관리 및 통계</p>
+        </div>
+        <button onclick="this.closest('.browse-overlay').remove()" 
+          style="background:none;border:none;font-size:28px;cursor:pointer;color:var(--text-muted);line-height:1;">×</button>
+      </div>
+      
+      <div style="display:grid;gap:12px;">
+        <button onclick="const overlay=this.closest('.browse-overlay');overlay.remove();setTimeout(()=>showStats(),100);" 
+          style="width:100%;padding:18px 20px;background:linear-gradient(135deg,rgba(255,255,255,0.9),rgba(249,199,220,0.1));border:2px solid var(--border);border-radius:12px;text-align:left;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;"
+          onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='var(--pink-mid)';"
+          onmouseout="this.style.transform='';this.style.borderColor='var(--border)';">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="font-size:32px;">📊</div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;">사용 통계</div>
+              <div style="font-size:11px;color:var(--text-muted);">검색 기록, 인기 검색어, 브라우즈 클릭 분석</div>
+            </div>
+          </div>
+        </button>
+        
+        <button onclick="const overlay=this.closest('.browse-overlay');overlay.remove();setTimeout(()=>changePassword(),100);" 
+          style="width:100%;padding:18px 20px;background:linear-gradient(135deg,rgba(255,255,255,0.9),rgba(249,199,220,0.1));border:2px solid var(--border);border-radius:12px;text-align:left;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;"
+          onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='var(--pink-mid)';"
+          onmouseout="this.style.transform='';this.style.borderColor='var(--border)';">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="font-size:32px;">🔑</div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;">비밀번호 변경</div>
+              <div style="font-size:11px;color:var(--text-muted);">앱 접속 비밀번호 변경 및 데이터 재암호화</div>
+            </div>
+          </div>
+        </button>
+        
+        <button onclick="const overlay=this.closest('.browse-overlay');overlay.remove();setTimeout(()=>openStudentManagement(),100);" 
+          style="width:100%;padding:18px 20px;background:linear-gradient(135deg,rgba(255,255,255,0.9),rgba(249,199,220,0.1));border:2px solid var(--border);border-radius:12px;text-align:left;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;"
+          onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='var(--pink-mid)';"
+          onmouseout="this.style.transform='';this.style.borderColor='var(--border)';">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="font-size:32px;">👥</div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;">학생 관리</div>
+              <div style="font-size:11px;color:var(--text-muted);">학생 추가, 수정, 삭제 및 데이터 관리</div>
+            </div>
+          </div>
+        </button>
+      </div>
+      
+      <div style="margin-top:20px;padding:16px;background:rgba(249,199,220,0.1);border-radius:10px;">
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.6;">
+          💡 <strong>Tip:</strong> 검색창에 <code style="background:rgba(0,0,0,0.1);padding:2px 6px;border-radius:4px;font-family:monospace;">admin</code>을 입력하면 언제든 관리자 패널에 접속할 수 있습니다.
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.remove();
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// 기존 코드
+// ══════════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════
+// 학생 관리 (추가/수정/삭제)
+// ══════════════════════════════════════════════════════════
+
+function openStudentManagement() {
+  const overlay = document.createElement('div');
+  overlay.className = 'browse-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML = `
+    <div class="browse-sheet" style="max-width:900px;max-height:80vh;overflow:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;position:sticky;top:0;background:var(--bg);padding-bottom:12px;z-index:10;">
+        <div>
+          <h2 style="font-size:18px;font-weight:900;color:var(--text);margin:0;">👥 학생 관리</h2>
+          <p style="font-size:11px;color:var(--text-muted);margin-top:4px;">총 ${STUDENTS.length}명</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="openAddStudentForm()" 
+            style="padding:8px 16px;background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
+            + 학생 추가
+          </button>
+          <button onclick="this.closest('.browse-overlay').remove()" 
+            style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-muted);">×</button>
+        </div>
+      </div>
+      
+      <div id="student-list" style="display:grid;gap:8px;">
+        ${STUDENTS.map((s, idx) => `
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;">
+            <div style="flex:1;display:grid;grid-template-columns:120px 100px 80px 80px 100px;gap:12px;align-items:center;">
+              <div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">${s.name}</div>
+                ${STAFF.has(s.name) ? '<span style="font-size:9px;background:var(--pink-deep);color:#fff;padding:2px 6px;border-radius:4px;font-weight:900;">STAFF</span>' : ''}
+              </div>
+              <div style="font-size:12px;color:var(--text-muted);">${s.id}</div>
+              <div style="font-size:12px;color:var(--text);">조: ${s.group||'-'}</div>
+              <div style="font-size:12px;color:var(--text);">방: ${s.room||'-'}</div>
+              <div style="font-size:12px;color:var(--text);">차량: ${s.group ? getCar(s.group)||'-' : '-'}</div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button onclick="openEditStudentForm(${idx})" 
+                style="padding:6px 12px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;color:var(--text);font-family:'Noto Sans KR',sans-serif;"
+                onmouseover="this.style.borderColor='var(--pink-mid)';"
+                onmouseout="this.style.borderColor='var(--border)';">
+                수정
+              </button>
+              <button onclick="deleteStudent(${idx})" 
+                style="padding:6px 12px;background:none;border:1.5px solid #ff6b6b;border-radius:6px;font-size:11px;cursor:pointer;color:#ff6b6b;font-family:'Noto Sans KR',sans-serif;"
+                onmouseover="this.style.background='rgba(255,107,107,0.1)';"
+                onmouseout="this.style.background='none';">
+                삭제
+              </button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.remove();
+  });
+}
+
+function openAddStudentForm() {
+  const overlay = document.createElement('div');
+  overlay.className = 'browse-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML = `
+    <div class="browse-sheet" style="max-width:500px;">
+      <h2 style="font-size:18px;font-weight:900;color:var(--text);margin-bottom:20px;">➕ 학생 추가</h2>
+      
+      <div style="display:grid;gap:12px;margin-bottom:20px;">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">이름 *</label>
+          <input type="text" id="add-name" placeholder="김평일" 
+            style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans KR',sans-serif;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">학번 *</label>
+          <input type="text" id="add-id" placeholder="202510046" 
+            style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans KR',sans-serif;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">조</label>
+          <input type="text" id="add-group" placeholder="1조" 
+            style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans KR',sans-serif;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">방번호</label>
+          <input type="text" id="add-room" placeholder="303호" 
+            style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans KR',sans-serif;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="checkbox" id="add-staff" style="width:16px;height:16px;cursor:pointer;">
+            <span style="font-size:12px;font-weight:600;color:var(--text);">스태프로 설정</span>
+          </label>
+        </div>
+      </div>
+      
+      <div style="display:flex;gap:8px;">
+        <button onclick="this.closest('.browse-overlay').remove()" 
+          style="flex:1;padding:12px;background:none;border:1.5px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:13px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
+          취소
+        </button>
+        <button onclick="addStudent()" 
+          style="flex:1;padding:12px;background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
+          추가
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function openEditStudentForm(idx) {
+  const student = STUDENTS[idx];
+  const overlay = document.createElement('div');
+  overlay.className = 'browse-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML = `
+    <div class="browse-sheet" style="max-width:500px;">
+      <h2 style="font-size:18px;font-weight:900;color:var(--text);margin-bottom:20px;">✏️ 학생 수정</h2>
+      
+      <div style="display:grid;gap:12px;margin-bottom:20px;">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">이름 *</label>
+          <input type="text" id="edit-name" value="${student.name}" 
+            style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans KR',sans-serif;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">학번 *</label>
+          <input type="text" id="edit-id" value="${student.id}" 
+            style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans KR',sans-serif;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">조</label>
+          <input type="text" id="edit-group" value="${student.group||''}" 
+            style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans KR',sans-serif;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">방번호</label>
+          <input type="text" id="edit-room" value="${student.room||''}" 
+            style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans KR',sans-serif;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="checkbox" id="edit-staff" ${STAFF.has(student.name) ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;">
+            <span style="font-size:12px;font-weight:600;color:var(--text);">스태프로 설정</span>
+          </label>
+        </div>
+      </div>
+      
+      <div style="display:flex;gap:8px;">
+        <button onclick="this.closest('.browse-overlay').remove()" 
+          style="flex:1;padding:12px;background:none;border:1.5px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:13px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
+          취소
+        </button>
+        <button onclick="editStudent(${idx})" 
+          style="flex:1;padding:12px;background:linear-gradient(135deg,var(--pink-mid),var(--pink-deep));border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
+          저장
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+async function addStudent() {
+  const name = document.getElementById('add-name').value.trim();
+  const id = document.getElementById('add-id').value.trim();
+  const group = document.getElementById('add-group').value.trim();
+  const room = document.getElementById('add-room').value.trim();
+  const isStaff = document.getElementById('add-staff').checked;
+  
+  if (!name || !id) {
+    alert('이름과 학번은 필수입니다.');
+    return;
+  }
+  
+  // 학생 추가
+  STUDENTS.push({ name, id, group, room });
+  if (isStaff) STAFF.add(name);
+  
+  // 데이터 저장
+  await saveStudentData();
+}
+
+async function editStudent(idx) {
+  const oldName = STUDENTS[idx].name;
+  const name = document.getElementById('edit-name').value.trim();
+  const id = document.getElementById('edit-id').value.trim();
+  const group = document.getElementById('edit-group').value.trim();
+  const room = document.getElementById('edit-room').value.trim();
+  const isStaff = document.getElementById('edit-staff').checked;
+  
+  if (!name || !id) {
+    alert('이름과 학번은 필수입니다.');
+    return;
+  }
+  
+  // 학생 수정
+  STUDENTS[idx] = { name, id, group, room };
+  
+  // 스태프 업데이트
+  STAFF.delete(oldName);
+  if (isStaff) STAFF.add(name);
+  
+  // 데이터 저장
+  await saveStudentData();
+}
+
+async function deleteStudent(idx) {
+  const student = STUDENTS[idx];
+  if (!confirm(`${student.name}(${student.id})을(를) 삭제하시겠습니까?`)) {
+    return;
+  }
+  
+  // 학생 삭제
+  STAFF.delete(student.name);
+  STUDENTS.splice(idx, 1);
+  
+  // 데이터 저장
+  await saveStudentData();
+}
+
+async function saveStudentData() {
+  try {
+    // 현재 비밀번호로 암호화
+    const currentPassword = '0125'; // 현재 로그인 비밀번호
+    
+    const studentsJson = JSON.stringify(STUDENTS);
+    const staffJson = JSON.stringify([...STAFF]);
+    
+    const newEncStudents = await encryptData(studentsJson, currentPassword);
+    const newEncStaff = await encryptData(staffJson, currentPassword);
+    
+    // 현재 HTML 가져오기
+    let htmlContent = document.documentElement.outerHTML;
+    
+    // 암호화 데이터 교체 (정규식 사용)
+    const studentsRegex = /const ENC_STUDENTS = \{[^}]+\};/;
+    const newStudentsLine = `const ENC_STUDENTS = ${JSON.stringify(newEncStudents)};`;
+    htmlContent = htmlContent.replace(studentsRegex, newStudentsLine);
+    
+    const staffRegex = /const ENC_STAFF = \{[^}]+\};/;
+    const newStaffLine = `const ENC_STAFF = ${JSON.stringify(newEncStaff)};`;
+    htmlContent = htmlContent.replace(staffRegex, newStaffLine);
+    
+    // DOCTYPE 추가
+    if (!htmlContent.startsWith('<!DOCTYPE')) {
+      htmlContent = '<!DOCTYPE html>\n' + htmlContent;
+    }
+    
+    // 새 HTML 파일 다운로드
+    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'lookup2_final_new.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    // 모든 오버레이 닫기
+    document.querySelectorAll('.browse-overlay').forEach(el => el.remove());
+    
+    alert('✅ 변경사항이 저장된 새 파일이 다운로드되었습니다!\n\n기존 파일을 새 파일로 교체한 후 페이지를 새로고침하세요.');
+    
+  } catch (error) {
+    console.error('저장 오류:', error);
+    alert('❌ 저장 중 오류가 발생했습니다.\n\n오류 내용: ' + error.message);
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// 기존 코드
+// ══════════════════════════════════════════════════════════
+
 function onSearch() {
   const q = document.getElementById('search-inp').value.trim();
   const area = document.getElementById('result-area');
   const emptyState = document.getElementById('empty-state');
+
+  // 관리자 모드 진입
+  if (q.toLowerCase() === 'admin') {
+    document.getElementById('search-inp').value = '';
+    openAdminPanel();
+    return;
+  }
 
   if (!q) {
     area.innerHTML = '';
     if (emptyState) emptyState.style.display = '';
     return;
   }
+  
+  // 통계 기록
+  trackSearch(q);
+  
   if (emptyState) emptyState.style.display = 'none';
 
   const results = STUDENTS.filter(s => s.name.includes(q) || s.id.includes(q));
@@ -1274,6 +1936,9 @@ function onSearch() {
 
 // ── 브라우즈 ──
 function openBrowse(type) {
+  // 통계 기록
+  trackBrowse(type);
+  
   const overlay = document.createElement('div');
   overlay.className = 'browse-overlay';
   overlay.id = 'browse-overlay';
@@ -1316,6 +1981,9 @@ function openBrowse(type) {
 }
 
 function openManual() {
+  // 통계 기록
+  trackBrowse('manual');
+  
   const overlay = document.createElement('div');
   overlay.className = 'browse-overlay';
   overlay.id = 'browse-overlay';
@@ -1431,21 +2099,25 @@ async function executePasswordChange() {
     const newEncStudents = await encryptData(studentsJson, newPwd);
     const newEncStaff = await encryptData(staffJson, newPwd);
     
-    // 현재 HTML 파일 읽기
-    const response = await fetch(window.location.href);
-    let htmlContent = await response.text();
+    // 현재 HTML 가져오기
+    let htmlContent = document.documentElement.outerHTML;
     
-    // 암호화 데이터 교체
-    const oldStudentsLine = `const ENC_STUDENTS = ${JSON.stringify(ENC_STUDENTS)};`;
+    // 암호화 데이터 교체 (정규식 사용)
+    const studentsRegex = /const ENC_STUDENTS = \{[^}]+\};/;
     const newStudentsLine = `const ENC_STUDENTS = ${JSON.stringify(newEncStudents)};`;
-    htmlContent = htmlContent.replace(oldStudentsLine, newStudentsLine);
+    htmlContent = htmlContent.replace(studentsRegex, newStudentsLine);
     
-    const oldStaffLine = `const ENC_STAFF = ${JSON.stringify(ENC_STAFF)};`;
+    const staffRegex = /const ENC_STAFF = \{[^}]+\};/;
     const newStaffLine = `const ENC_STAFF = ${JSON.stringify(newEncStaff)};`;
-    htmlContent = htmlContent.replace(oldStaffLine, newStaffLine);
+    htmlContent = htmlContent.replace(staffRegex, newStaffLine);
+    
+    // DOCTYPE 추가 (document.documentElement.outerHTML에는 없음)
+    if (!htmlContent.startsWith('<!DOCTYPE')) {
+      htmlContent = '<!DOCTYPE html>\n' + htmlContent;
+    }
     
     // 새 HTML 파일 다운로드
-    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -1460,7 +2132,7 @@ async function executePasswordChange() {
     
   } catch (error) {
     console.error('비밀번호 변경 오류:', error);
-    alert('비밀번호 변경 중 오류가 발생했습니다.');
+    alert('❌ 비밀번호 변경 중 오류가 발생했습니다.\n\n오류 내용: ' + error.message);
   }
 }
 

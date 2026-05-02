@@ -770,28 +770,6 @@
       height: 350px; /* 로고까지 보이도록 낮춤 */
       overflow-y: auto;
       padding-right: 4px; /* 스크롤바 공간 */
-      position: relative;
-    }
-    
-    /* 스크롤 인디케이터 */
-    .results-section::after {
-      content: "↓ 더 보기";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px;
-      background: linear-gradient(to top, rgba(255,255,255,0.95), transparent);
-      text-align: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--pink-deep);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .results-section.has-scroll::after {
-      opacity: 1;
     }
     
     /* 스크롤바 스타일링 */
@@ -917,11 +895,9 @@
       <button class="btn-main" onclick="login()">로그인</button>
       <div class="err-msg" id="login-err" style="text-align:center;"></div>
       
-      <div style="margin-top:20px;padding:16px;background:rgba(249,199,220,0.15);border-radius:12px;border:1px solid var(--border);">
-        <div style="font-size:11px;font-weight:700;color:var(--pink-deep);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;text-align:center;"></div>
+      <div style="margin-top:20px;padding:14px;background:rgba(249,199,220,0.15);border-radius:12px;border:1px solid var(--border);">
         <div style="font-size:11px;color:var(--text-muted);line-height:1.7;text-align:center;">
-          학우분들의 정보는 AES-GCM로 암호화되어 있습니다.
-          <br>
+          학우분들의 정보는 AES-GCM으로 암호화되어 있습니다.
         </div>
       </div>
     </div>
@@ -1202,9 +1178,13 @@ function resumeActivity() {
   }, { passive: true });
 });
 
-// 개발자 도구 감지 및 자동 로그아웃
+// 개발자 도구 감지 및 자동 로그아웃 (데스크탑만)
 setInterval(() => {
-  const threshold = 160;
+  // 모바일에서는 확대(줌) 때문에 오작동 → 데스크탑에서만 작동
+  const isMobile = window.innerWidth < 900;
+  if (isMobile) return; // 모바일에서는 비활성화
+  
+  const threshold = 200; // 더 여유있게 설정
   if ((window.outerWidth - window.innerWidth > threshold || 
        window.outerHeight - window.innerHeight > threshold) && SESSION_ACTIVE) {
     logout();
@@ -1290,19 +1270,6 @@ function onSearch() {
       <div class="student-id-compact">${s.id}</div>
     </div>
   `}).join('');
-  
-  // 스크롤 인디케이터 표시 여부 결정
-  const resultsSection = document.querySelector('.results-section');
-  setTimeout(() => {
-    if (resultsSection.scrollHeight > resultsSection.clientHeight) {
-      resultsSection.classList.add('has-scroll');
-      resultsSection.addEventListener('scroll', function() {
-        if (this.scrollTop + this.clientHeight >= this.scrollHeight - 20) {
-          this.classList.remove('has-scroll');
-        }
-      });
-    }
-  }, 100);
 }
 
 // ── 브라우즈 ──

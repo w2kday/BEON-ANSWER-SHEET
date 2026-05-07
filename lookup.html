@@ -1082,9 +1082,6 @@
         <section class="results-section">
           <div class="divider mobile-only">검색 결과</div>
           <div id="result-area"></div>
-  
-  </div>
-
           <!-- 데스크탑 빈 상태 -->
           <div class="empty-state desktop-only" id="empty-state">
             <span class="emoji">🔎</span>
@@ -2249,121 +2246,6 @@ applyMobileLayout();
 window.addEventListener('resize', applyMobileLayout);
 
 document.getElementById('inp-id').focus();
-
-  // Google Sheets 설정
-  const GOOGLE_API_KEY = 'AIzaSyBQeqtk-vhLYaM9aXDs6PeXQ1L0Vj3iTBU';
-  const GOOGLE_SHEET_ID = '1QBwV1LOQIwbScbO5bAzg_2gKCE6WfCelmjS7cypGrGs';
-  const ENABLE_STATS = true; // 통계 기능 ON/OFF
-
-  // 검색 기록 저장 (Google Sheets)
-  async function logSearch(searchTerm) {
-    if (!ENABLE_STATS) return;
-    
-    try {
-      const timestamp = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
-      const userIdentifier = getUserIdentifier();
-      
-      // Sheet1에 검색 로그 추가
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Sheet1!A:C:append?valueInputOption=USER_ENTERED&key=${GOOGLE_API_KEY}`;
-      
-      await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          values: [[timestamp, userIdentifier, searchTerm]]
-        })
-      });
-      
-      // 통계 업데이트
-      await updateStats(searchTerm);
-    } catch (error) {
-      console.log('검색 기록 저장 실패:', error);
-    }
-  }
-  
-  // 사용자 식별자 생성 (IP 기반 대신 브라우저 핑거프린트)
-  function getUserIdentifier() {
-    let identifier = localStorage.getItem('user_identifier');
-    if (!identifier) {
-      identifier = 'User_' + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('user_identifier', identifier);
-    }
-    return identifier;
-  }
-  
-  // 통계 업데이트
-  async function updateStats(searchTerm) {
-    try {
-      // Sheet2에서 기존 통계 읽기
-      const readUrl = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Sheet2!A:B?key=${GOOGLE_API_KEY}`;
-      const response = await fetch(readUrl);
-      const data = await response.json();
-      
-      const rows = data.values || [['이름', '검색횟수']];
-      let found = false;
-      let rowIndex = -1;
-      
-      // 기존 데이터에서 검색어 찾기
-      for (let i = 1; i < rows.length; i++) {
-        if (rows[i][0] === searchTerm) {
-          found = true;
-          rowIndex = i + 1; // A1 기준이므로 +1
-          rows[i][1] = (parseInt(rows[i][1]) || 0) + 1;
-          break;
-        }
-      }
-      
-      if (found) {
-        // 기존 항목 업데이트
-        const updateUrl = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Sheet2!B${rowIndex}?valueInputOption=USER_ENTERED&key=${GOOGLE_API_KEY}`;
-        await fetch(updateUrl, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            values: [[rows[rowIndex - 1][1]]]
-          })
-        });
-      } else {
-        // 새 항목 추가
-        const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Sheet2!A:B:append?valueInputOption=USER_ENTERED&key=${GOOGLE_API_KEY}`;
-        await fetch(appendUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            values: [[searchTerm, 1]]
-          })
-        });
-      }
-    } catch (error) {
-      console.log('통계 업데이트 실패:', error);
-    }
-  }
-  
-  // 전체 통계 가져오기
-  async function getTopSearches(limit = 10) {
-    try {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Sheet2!A:B?key=${GOOGLE_API_KEY}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      
-      if (!data.values || data.values.length <= 1) {
-        return [];
-      }
-      
-      // 헤더 제외하고 데이터 가져오기
-      const stats = data.values.slice(1)
-        .map(row => ({ name: row[0], count: parseInt(row[1]) || 0 }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, limit);
-      
-      return stats;
-    } catch (error) {
-      console.log('통계 가져오기 실패:', error);
-      return [];
-    }
-  }
-
-  </script>
-  
+</script>
 </body>
 </html>

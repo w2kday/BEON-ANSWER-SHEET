@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>관리자 로그인</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #f9c7dc;
+    --pink-mid: #f0a0c0;
+    --pink-deep: #c4607a;
+    --pink-dark: #7a2e45;
+    --bg: #fef6f9;
+    --surface: #ffffff;
+    --text: #2c1018;
+    --text-muted: #9a6475;
+    --border: rgba(249,199,220,0.6);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .login-container {
+    max-width: 400px;
+    width: 100%;
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 30px rgba(196,96,122,0.15);
+  }
+  .admin-container {
+    max-width: 1200px;
+    width: 100%;
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 30px rgba(196,96,122,0.15);
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--pink-dark);
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  .input-group {
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pink-deep);
+    margin-bottom: 8px;
+  }
+  input {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--pink-mid);
+    box-shadow: 0 0 0 3px rgba(249,199,220,0.2);
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--pink) 0%, var(--pink-mid) 100%);
+    border: none;
+    border-radius: 8px;
+    color: var(--pink-dark);
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(249,199,220,0.4);
+  }
+  .error {
+    color: #d63031;
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+  }
+  .section {
+    margin-bottom: 40px;
+    padding: 20px;
+    background: var(--bg);
+    border-radius: 12px;
+  }
+  .section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--pink-deep);
+    margin-bottom: 20px;
+  }
+  .section button {
+    width: auto;
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--pink);
+    color: var(--pink-dark);
+    font-weight: 600;
+  }
+  tr:hover {
+    background: rgba(249,199,220,0.1);
+  }
+  .loading {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 20px;
+  }
+  .logout-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: auto;
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  .hidden {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- 로그인 화면 -->
+<div id="login-screen" class="login-container">
+  <h1>🔒 관리자 로그인</h1>
+  <form onsubmit="login(event)">
+    <div class="input-group">
+      <label for="admin-id">아이디</label>
+      <input type="text" id="admin-id" autocomplete="username" required>
+    </div>
+    <div class="input-group">
+      <label for="admin-pw">비밀번호</label>
+      <input type="password" id="admin-pw" autocomplete="current-password" required>
+    </div>
+    <button type="submit">로그인</button>
+    <p id="login-error" class="error"></p>
+  </form>
+</div>
+
+<!-- 관리자 대시보드 -->
+<div id="admin-screen" class="admin-container hidden">
+  <button class="logout-btn" onclick="logout()">로그아웃</button>
+  
+  <h1>🔒 관리자 통계 대시보드</h1>
+  
+  <div class="section">
+    <h2>📊 검색 통계 TOP 20</h2>
+    <button onclick="loadTopSearches()">통계 새로고침</button>
+    <div id="top-searches"></div>
+  </div>
+  
+  <div class="section">
+    <h2>📝 최근 검색 로그 (최근 50개)</h2>
+    <button onclick="loadRecentLogs()">로그 새로고침</button>
+    <div id="recent-logs"></div>
+  </div>
+</div>
+
+<script>
+// 암호화된 관리자 인증 정보 (SHA-256)
+const ADMIN_CREDENTIALS = {
+  id: '44da87597b73b460f680622338f5a7ab2659207477d37cdb8a662fe7e7aef93a',
+  pw: '50c3d1765e33df94652bf9225a7f12bc7235d27631a4bb42e7ef6af1598e3b84'
+};
+
+const GOOGLE_API_KEY = 'AIzaSyBQeqtk-vhLYaM9aXDs6PeXQ1L0Vj3iTBU';
+const GOOGLE_SHEET_ID = '1QBwV1LOQIwbScbO5bAzg_2gKCE6WfCelmjS7cypGrGs';
+
+// SHA-256 해시 함수
+async function hashString(str) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(str);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// 로그인 처리
+async function login(event) {
+  event.preventDefault();
+  
+  const id = document.getElementById('admin-id').value;
+  const pw = document.getElementById('admin-pw').value;
+  const errorEl = document.getElementById('login-error');
+  
+  const hashedId = await hashString(id);
+  const hashedPw = await hashString(pw);
+  
+  if (hashedId === ADMIN_CREDENTIALS.id && hashedPw === ADMIN_CREDENTIALS.pw) {
+    // 로그인 성공
+    sessionStorage.setItem('admin_logged_in', 'true');
+    showAdminScreen();
+  } else {
+    // 로그인 실패
+    errorEl.textContent = '아이디 또는 비밀번호가 올바르지 않습니다.';
+    document.getElementById('admin-pw').value = '';
+  }
+}
+
+// 로그아웃
+function logout() {
+  sessionStorage.removeItem('admin_logged_in');
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('admin-screen').classList.add('hidden');
+  document.getElementById('admin-id').value = '';
+  document.getElementById('admin-pw').value = '';
+  document.getElementById('login-error').textContent = '';
+}
+
+// 관리자 화면 표시
+function showAdminScreen() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('admin-screen').classList.remove('hidden');
+  loadTopSearches();
+  loadRecentLogs();
+}
+
+// 페이지 로드 시 세션 확인
+window.addEventListener('load', () => {
+  if (sessionStorage.getItem('admin_logged_in') === 'true') {
+    showAdminScreen();
+  }
+});
+
+// 통계 로드
+async function loadTopSearches() {
+  const container = document.getElementById('top-searches');
+  container.innerHTML = '<p class="loading">로딩 중...</p>';
+  
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Sheet2!A:B?key=${GOOGLE_API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (!data.values || data.values.length <= 1) {
+      container.innerHTML = '<p class="loading">검색 기록이 없습니다.</p>';
+      return;
+    }
+    
+    const stats = data.values.slice(1)
+      .map(row => ({ name: row[0], count: parseInt(row[1]) || 0 }))
+      .filter(item => item.name && item.count > 0)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 20);
+    
+    let html = '<table><thead><tr><th>순위</th><th>이름</th><th>검색 횟수</th></tr></thead><tbody>';
+    stats.forEach((item, index) => {
+      const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : (index + 1);
+      html += `<tr><td>${medal}</td><td>${item.name}</td><td><strong>${item.count}</strong>회</td></tr>`;
+    });
+    html += '</tbody></table>';
+    
+    container.innerHTML = html;
+  } catch (error) {
+    container.innerHTML = '<p style="color: red;">통계 불러오기 실패: ' + error.message + '</p>';
+  }
+}
+
+async function loadRecentLogs() {
+  const container = document.getElementById('recent-logs');
+  container.innerHTML = '<p class="loading">로딩 중...</p>';
+  
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Sheet1!A:C?key=${GOOGLE_API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (!data.values || data.values.length <= 1) {
+      container.innerHTML = '<p class="loading">검색 로그가 없습니다.</p>';
+      return;
+    }
+    
+    const logs = data.values.slice(1).reverse().slice(0, 50);
+    
+    let html = '<table><thead><tr><th>시간</th><th>사용자</th><th>검색어</th></tr></thead><tbody>';
+    logs.forEach(row => {
+      html += `<tr><td>${row[0]}</td><td>${row[1]}</td><td><strong>${row[2]}</strong></td></tr>`;
+    });
+    html += '</tbody></table>';
+    
+    container.innerHTML = html;
+  } catch (error) {
+    container.innerHTML = '<p style="color: red;">로그 불러오기 실패: ' + error.message + '</p>';
+  }
+}
+</script>
+</body>
+</html>
